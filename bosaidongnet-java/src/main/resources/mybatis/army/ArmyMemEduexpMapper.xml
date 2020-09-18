@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeethink.project.army.mapper.ArmyMemEduexpMapper">
+    
+    <resultMap type="ArmyMemEduexp" id="ArmyMemEduexpResult">
+        <result property="eduexpId"    column="eduexp_id"    />
+        <result property="memId"    column="mem_id"    />
+        <result property="schoolName"    column="school_name"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="education"    column="education"    />
+        <result property="major"    column="major"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectArmyMemEduexpVo">
+        select eduexp_id, mem_id, school_name, start_time, end_time, education, major, update_time, create_time, status from army_mem_eduexp
+    </sql>
+
+    <select id="selectArmyMemEduexpList" parameterType="ArmyMemEduexp" resultMap="ArmyMemEduexpResult">
+        <include refid="selectArmyMemEduexpVo"/>
+        <where>  
+            <if test="memId != null  and memId != ''"> and mem_id = #{memId}</if>
+            <if test="schoolName != null  and schoolName != ''"> and school_name like concat('%', #{schoolName}, '%')</if>
+            <if test="education != null  and education != ''"> and education &gt;= #{education}</if>
+            <if test="major != null  and major != ''"> and major like concat('%', #{major}, '%')</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectArmyMemEduexpById" parameterType="Long" resultMap="ArmyMemEduexpResult">
+        <include refid="selectArmyMemEduexpVo"/>
+        where eduexp_id = #{eduexpId}
+    </select>
+        
+    <insert id="insertArmyMemEduexp" parameterType="ArmyMemEduexp" useGeneratedKeys="true" keyProperty="eduexpId">
+        insert into army_mem_eduexp
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="memId != null">mem_id,</if>
+            <if test="schoolName != null">school_name,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="education != null">education,</if>
+            <if test="major != null">major,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="status != null">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="memId != null">#{memId},</if>
+            <if test="schoolName != null">#{schoolName},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="education != null">#{education},</if>
+            <if test="major != null">#{major},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="status != null">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateArmyMemEduexp" parameterType="ArmyMemEduexp">
+        update army_mem_eduexp
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="memId != null">mem_id = #{memId},</if>
+            <if test="schoolName != null">school_name = #{schoolName},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="education != null">education = #{education},</if>
+            <if test="major != null">major = #{major},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where eduexp_id = #{eduexpId}
+    </update>
+
+    <delete id="deleteArmyMemEduexpById" parameterType="Long">
+        delete from army_mem_eduexp where eduexp_id = #{eduexpId}
+    </delete>
+
+    <delete id="deleteArmyMemEduexpByIds" parameterType="String">
+        delete from army_mem_eduexp where eduexp_id in 
+        <foreach item="eduexpId" collection="array" open="(" separator="," close=")">
+            #{eduexpId}
+        </foreach>
+    </delete>
+    
+</mapper>

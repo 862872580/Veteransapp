@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeethink.project.army.mapper.ArmyMemWorkaimMapper">
+    
+    <resultMap type="ArmyMemWorkaim" id="ArmyMemWorkaimResult">
+        <result property="workaimId"    column="workaim_id"    />
+        <result property="memId"    column="mem_id"    />
+        <result property="workaimType"    column="workaim_type"    />
+        <result property="workaimPosition"    column="workaim_position"    />
+        <result property="workaimDistrict"    column="workaim_district"    />
+        <result property="workaimCity"    column="workaim_city"    />
+        <result property="workaimMinsalary"    column="workaim_minsalary"    />
+        <result property="workaimMaxsalary"    column="workaim_maxsalary"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectArmyMemWorkaimVo">
+        select workaim_id, mem_id, workaim_type, workaim_position, workaim_district, workaim_city, workaim_minsalary, workaim_maxsalary, update_time, create_time, status from army_mem_workaim
+    </sql>
+
+    <select id="selectArmyMemWorkaimList" parameterType="ArmyMemWorkaim" resultMap="ArmyMemWorkaimResult">
+        <include refid="selectArmyMemWorkaimVo"/>
+        <where>  
+            <if test="memId != null  and memId != ''"> and mem_id = #{memId}</if>
+            <if test="workaimType != null  and workaimType != ''"> and workaim_type = #{workaimType}</if>
+            <if test="workaimPosition != null  and workaimPosition != ''"> and workaim_position like concat('%', #{workaimPosition}, '%')</if>
+            <if test="workaimDistrict != null  and workaimDistrict != ''"> and workaim_district = #{workaimDistrict}</if>
+            <if test="workaimCity != null  and workaimCity != ''"> and workaim_city = #{workaimCity}</if>
+            <if test="workaimMinsalary != null "> and workaim_minsalary &gt;= #{workaimMinsalary}</if>
+            <if test="workaimMaxsalary != null "> and workaim_maxsalary &lt;= #{workaimMaxsalary}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectArmyMemWorkaimById" parameterType="Long" resultMap="ArmyMemWorkaimResult">
+        <include refid="selectArmyMemWorkaimVo"/>
+        where workaim_id = #{workaimId}
+    </select>
+        
+    <insert id="insertArmyMemWorkaim" parameterType="ArmyMemWorkaim" useGeneratedKeys="true" keyProperty="workaimId">
+        insert into army_mem_workaim
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="memId != null">mem_id,</if>
+            <if test="workaimType != null">workaim_type,</if>
+            <if test="workaimPosition != null">workaim_position,</if>
+            <if test="workaimDistrict != null">workaim_district,</if>
+            <if test="workaimCity != null">workaim_city,</if>
+            <if test="workaimMinsalary != null">workaim_minsalary,</if>
+            <if test="workaimMaxsalary != null">workaim_maxsalary,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="status != null">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="memId != null">#{memId},</if>
+            <if test="workaimType != null">#{workaimType},</if>
+            <if test="workaimPosition != null">#{workaimPosition},</if>
+            <if test="workaimDistrict != null">#{workaimDistrict},</if>
+            <if test="workaimCity != null">#{workaimCity},</if>
+            <if test="workaimMinsalary != null">#{workaimMinsalary},</if>
+            <if test="workaimMaxsalary != null">#{workaimMaxsalary},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="status != null">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateArmyMemWorkaim" parameterType="ArmyMemWorkaim">
+        update army_mem_workaim
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="memId != null">mem_id = #{memId},</if>
+            <if test="workaimType != null">workaim_type = #{workaimType},</if>
+            <if test="workaimPosition != null">workaim_position = #{workaimPosition},</if>
+            <if test="workaimDistrict != null">workaim_district = #{workaimDistrict},</if>
+            <if test="workaimCity != null">workaim_city = #{workaimCity},</if>
+            <if test="workaimMinsalary != null">workaim_minsalary = #{workaimMinsalary},</if>
+            <if test="workaimMaxsalary != null">workaim_maxsalary = #{workaimMaxsalary},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where workaim_id = #{workaimId}
+    </update>
+
+    <delete id="deleteArmyMemWorkaimById" parameterType="Long">
+        delete from army_mem_workaim where workaim_id = #{workaimId}
+    </delete>
+
+    <delete id="deleteArmyMemWorkaimByIds" parameterType="String">
+        delete from army_mem_workaim where workaim_id in 
+        <foreach item="workaimId" collection="array" open="(" separator="," close=")">
+            #{workaimId}
+        </foreach>
+    </delete>
+    
+</mapper>

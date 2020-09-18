@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeethink.project.army.mapper.ArmyMemWorkexpMapper">
+    
+    <resultMap type="ArmyMemWorkexp" id="ArmyMemWorkexpResult">
+        <result property="workexpId"    column="workexp_id"    />
+        <result property="memId"    column="mem_id"    />
+        <result property="comName"    column="com_name"    />
+        <result property="beginTime"    column="begin_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="workexpPosition"    column="workexp_position"    />
+        <result property="workexpContent"    column="workexp_content"    />
+        <result property="workexpSalary"    column="workexp_salary"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectArmyMemWorkexpVo">
+        select workexp_id, mem_id, com_name, begin_time, end_time, workexp_position, workexp_content, workexp_salary, update_time, create_time, status from army_mem_workexp
+    </sql>
+
+    <select id="selectArmyMemWorkexpList" parameterType="ArmyMemWorkexp" resultMap="ArmyMemWorkexpResult">
+        <include refid="selectArmyMemWorkexpVo"/>
+        <where>  
+            <if test="memId != null  and memId != ''"> and mem_id = #{memId}</if>
+            <if test="comName != null  and comName != ''"> and com_name like concat('%', #{comName}, '%')</if>
+            <if test="beginTime != null "> and begin_time &gt;= #{beginTime}</if>
+            <if test="endTime != null "> and end_time &lt;= #{endTime}</if>
+            <if test="workexpPosition != null  and workexpPosition != ''"> and workexp_position like concat('%', #{workexpPosition}, '%')</if>
+            <if test="workexpSalary != null "> and workexp_salary &gt;= #{workexpSalary}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectArmyMemWorkexpById" parameterType="Long" resultMap="ArmyMemWorkexpResult">
+        <include refid="selectArmyMemWorkexpVo"/>
+        where workexp_id = #{workexpId}
+    </select>
+        
+    <insert id="insertArmyMemWorkexp" parameterType="ArmyMemWorkexp" useGeneratedKeys="true" keyProperty="workexpId">
+        insert into army_mem_workexp
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="memId != null and memId != ''">mem_id,</if>
+            <if test="comName != null">com_name,</if>
+            <if test="beginTime != null">begin_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="workexpPosition != null">workexp_position,</if>
+            <if test="workexpContent != null">workexp_content,</if>
+            <if test="workexpSalary != null">workexp_salary,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="status != null">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="memId != null and memId != ''">#{memId},</if>
+            <if test="comName != null">#{comName},</if>
+            <if test="beginTime != null">#{beginTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="workexpPosition != null">#{workexpPosition},</if>
+            <if test="workexpContent != null">#{workexpContent},</if>
+            <if test="workexpSalary != null">#{workexpSalary},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="status != null">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateArmyMemWorkexp" parameterType="ArmyMemWorkexp">
+        update army_mem_workexp
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="memId != null and memId != ''">mem_id = #{memId},</if>
+            <if test="comName != null">com_name = #{comName},</if>
+            <if test="beginTime != null">begin_time = #{beginTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="workexpPosition != null">workexp_position = #{workexpPosition},</if>
+            <if test="workexpContent != null">workexp_content = #{workexpContent},</if>
+            <if test="workexpSalary != null">workexp_salary = #{workexpSalary},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where workexp_id = #{workexpId}
+    </update>
+
+    <delete id="deleteArmyMemWorkexpById" parameterType="Long">
+        delete from army_mem_workexp where workexp_id = #{workexpId}
+    </delete>
+
+    <delete id="deleteArmyMemWorkexpByIds" parameterType="String">
+        delete from army_mem_workexp where workexp_id in 
+        <foreach item="workexpId" collection="array" open="(" separator="," close=")">
+            #{workexpId}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeethink.project.army.mapper.ArmyComMapper">
+    
+    <resultMap type="ArmyCom" id="ArmyComResult">
+        <result property="comId"    column="com_id"    />
+        <result property="comname"    column="comname"    />
+        <result property="compassword"    column="compassword"    />
+        <result property="comName"    column="com_name"    />
+        <result property="comScale"    column="com_scale"    />
+        <result property="comIndustry"    column="com_industry"    />
+        <result property="comAddress"    column="com_address"    />
+        <result property="comSketch"    column="com_sketch"    />
+        <result property="comBoss"    column="com_boss"    />
+        <result property="comProduct"    column="com_product"    />
+        <result property="comPhoto"    column="com_photo"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="status"    column="status"    />
+        <result property="remark"    column="remark"    />
+        <result property="previous"    column="previous"    />
+    </resultMap>
+
+    <sql id="selectArmyComVo">
+        select com_id, comname, compassword, com_name, com_scale, com_industry, com_address, com_sketch, com_boss, com_product, com_photo, create_time, update_time, status, remark, previous from army_com
+    </sql>
+
+    <select id="selectArmyComList" parameterType="ArmyCom" resultMap="ArmyComResult">
+        <include refid="selectArmyComVo"/>
+        <where>  
+            <if test="comname != null  and comname != ''"> and comname = #{comname}</if>
+            <if test="compassword != null  and compassword != ''"> and compassword = #{compassword}</if>
+            <if test="comName != null  and comName != ''"> and com_name like concat('%', #{comName}, '%')</if>
+            <if test="comScale != null  and comScale != ''"> and com_scale = #{comScale}</if>
+            <if test="comIndustry != null  and comIndustry != ''"> and com_industry = #{comIndustry}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="previous != null "> and previous = #{previous}</if>
+        </where>
+    </select>
+    
+    <select id="selectArmyComById" parameterType="Long" resultMap="ArmyComResult">
+        <include refid="selectArmyComVo"/>
+        where com_id = #{comId}
+    </select>
+        
+    <insert id="insertArmyCom" parameterType="ArmyCom" useGeneratedKeys="true" keyProperty="comId">
+        insert into army_com
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="comname != null">comname,</if>
+            <if test="compassword != null">compassword,</if>
+            <if test="comName != null">com_name,</if>
+            <if test="comScale != null">com_scale,</if>
+            <if test="comIndustry != null">com_industry,</if>
+            <if test="comAddress != null">com_address,</if>
+            <if test="comSketch != null">com_sketch,</if>
+            <if test="comBoss != null">com_boss,</if>
+            <if test="comProduct != null">com_product,</if>
+            <if test="comPhoto != null">com_photo,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="previous != null">previous,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="comname != null">#{comname},</if>
+            <if test="compassword != null">#{compassword},</if>
+            <if test="comName != null">#{comName},</if>
+            <if test="comScale != null">#{comScale},</if>
+            <if test="comIndustry != null">#{comIndustry},</if>
+            <if test="comAddress != null">#{comAddress},</if>
+            <if test="comSketch != null">#{comSketch},</if>
+            <if test="comBoss != null">#{comBoss},</if>
+            <if test="comProduct != null">#{comProduct},</if>
+            <if test="comPhoto != null">#{comPhoto},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="previous != null">#{previous},</if>
+         </trim>
+    </insert>
+
+    <update id="updateArmyCom" parameterType="ArmyCom">
+        update army_com
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="comname != null">comname = #{comname},</if>
+            <if test="compassword != null">compassword = #{compassword},</if>
+            <if test="comName != null">com_name = #{comName},</if>
+            <if test="comScale != null">com_scale = #{comScale},</if>
+            <if test="comIndustry != null">com_industry = #{comIndustry},</if>
+            <if test="comAddress != null">com_address = #{comAddress},</if>
+            <if test="comSketch != null">com_sketch = #{comSketch},</if>
+            <if test="comBoss != null">com_boss = #{comBoss},</if>
+            <if test="comProduct != null">com_product = #{comProduct},</if>
+            <if test="comPhoto != null">com_photo = #{comPhoto},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="previous != null">previous = #{previous},</if>
+        </trim>
+        where com_id = #{comId}
+    </update>
+
+    <delete id="deleteArmyComById" parameterType="Long">
+        delete from army_com where com_id = #{comId}
+    </delete>
+
+    <delete id="deleteArmyComByIds" parameterType="String">
+        delete from army_com where com_id in 
+        <foreach item="comId" collection="array" open="(" separator="," close=")">
+            #{comId}
+        </foreach>
+    </delete>
+    
+</mapper>

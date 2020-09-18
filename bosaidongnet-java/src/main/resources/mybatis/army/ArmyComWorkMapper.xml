@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeethink.project.army.mapper.ArmyComWorkMapper">
+    
+    <resultMap type="ArmyComWork" id="ArmyComWorkResult">
+        <result property="workId"    column="work_id"    />
+        <result property="workPosition"    column="work_position"    />
+        <result property="workType"    column="work_type"    />
+        <result property="workMinsalary"    column="work_minsalary"    />
+        <result property="workMaxsalary"    column="work_maxsalary"    />
+        <result property="workCity"    column="work_city"    />
+        <result property="workDistrict"    column="work_district"    />
+        <result property="workPhone"    column="work_phone"    />
+        <result property="workEmail"    column="work_email"    />
+        <result property="workAdv"    column="work_adv"    />
+        <result property="workSketch"    column="work_sketch"    />
+        <result property="comId"    column="com_id"    />
+        <result property="workAddress"    column="work_address"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="status"    column="status"    />
+        <result property="remark"    column="remark"    />
+        <result property="previous"    column="previous"    />
+    </resultMap>
+
+    <sql id="selectArmyComWorkVo">
+        select work_id, work_position, work_type, work_minsalary, work_maxsalary, work_city, work_district, work_phone, work_email, work_adv, work_sketch, com_id, work_address, create_time, update_time, status, remark, previous from army_com_work
+    </sql>
+
+    <select id="selectArmyComWorkList" parameterType="ArmyComWork" resultMap="ArmyComWorkResult">
+        <include refid="selectArmyComWorkVo"/>
+        <where>  
+            <if test="workPosition != null  and workPosition != ''"> and work_position like concat('%', #{workPosition}, '%')</if>
+            <if test="workType != null  and workType != ''"> and work_type = #{workType}</if>
+            <if test="workMinsalary != null "> and work_minsalary &gt;= #{workMinsalary}</if>
+            <if test="workMaxsalary != null "> and work_maxsalary &lt;= #{workMaxsalary}</if>
+            <if test="workCity != null  and workCity != ''"> and work_city = #{workCity}</if>
+            <if test="workDistrict != null  and workDistrict != ''"> and work_district = #{workDistrict}</if>
+            <if test="workPhone != null  and workPhone != ''"> and work_phone = #{workPhone}</if>
+            <if test="workEmail != null  and workEmail != ''"> and work_email = #{workEmail}</if>
+            <if test="workAdv != null  and workAdv != ''"> and work_adv like concat('%', #{workAdv}, '%')</if>
+            <if test="comId != null "> and com_id = #{comId}</if>
+            <if test="workAddress != null  and workAddress != ''"> and work_address like concat('%', #{workAddress}, '%')</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectArmyComWorkById" parameterType="Long" resultMap="ArmyComWorkResult">
+        <include refid="selectArmyComWorkVo"/>
+        where work_id = #{workId}
+    </select>
+        
+    <insert id="insertArmyComWork" parameterType="ArmyComWork" useGeneratedKeys="true" keyProperty="workId">
+        insert into army_com_work
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workPosition != null">work_position,</if>
+            <if test="workType != null">work_type,</if>
+            <if test="workMinsalary != null">work_minsalary,</if>
+            <if test="workMaxsalary != null">work_maxsalary,</if>
+            <if test="workCity != null">work_city,</if>
+            <if test="workDistrict != null">work_district,</if>
+            <if test="workPhone != null">work_phone,</if>
+            <if test="workEmail != null">work_email,</if>
+            <if test="workAdv != null">work_adv,</if>
+            <if test="workSketch != null">work_sketch,</if>
+            <if test="comId != null">com_id,</if>
+            <if test="workAddress != null">work_address,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="previous != null">previous,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workPosition != null">#{workPosition},</if>
+            <if test="workType != null">#{workType},</if>
+            <if test="workMinsalary != null">#{workMinsalary},</if>
+            <if test="workMaxsalary != null">#{workMaxsalary},</if>
+            <if test="workCity != null">#{workCity},</if>
+            <if test="workDistrict != null">#{workDistrict},</if>
+            <if test="workPhone != null">#{workPhone},</if>
+            <if test="workEmail != null">#{workEmail},</if>
+            <if test="workAdv != null">#{workAdv},</if>
+            <if test="workSketch != null">#{workSketch},</if>
+            <if test="comId != null">#{comId},</if>
+            <if test="workAddress != null">#{workAddress},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="previous != null">#{previous},</if>
+         </trim>
+    </insert>
+
+    <update id="updateArmyComWork" parameterType="ArmyComWork">
+        update army_com_work
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="workPosition != null">work_position = #{workPosition},</if>
+            <if test="workType != null">work_type = #{workType},</if>
+            <if test="workMinsalary != null">work_minsalary = #{workMinsalary},</if>
+            <if test="workMaxsalary != null">work_maxsalary = #{workMaxsalary},</if>
+            <if test="workCity != null">work_city = #{workCity},</if>
+            <if test="workDistrict != null">work_district = #{workDistrict},</if>
+            <if test="workPhone != null">work_phone = #{workPhone},</if>
+            <if test="workEmail != null">work_email = #{workEmail},</if>
+            <if test="workAdv != null">work_adv = #{workAdv},</if>
+            <if test="workSketch != null">work_sketch = #{workSketch},</if>
+            <if test="comId != null">com_id = #{comId},</if>
+            <if test="workAddress != null">work_address = #{workAddress},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="previous != null">previous = #{previous},</if>
+        </trim>
+        where work_id = #{workId}
+    </update>
+
+    <delete id="deleteArmyComWorkById" parameterType="Long">
+        delete from army_com_work where work_id = #{workId}
+    </delete>
+
+    <delete id="deleteArmyComWorkByIds" parameterType="String">
+        delete from army_com_work where work_id in 
+        <foreach item="workId" collection="array" open="(" separator="," close=")">
+            #{workId}
+        </foreach>
+    </delete>
+    
+</mapper>

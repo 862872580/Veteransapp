@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeethink.project.army.mapper.ArmyMemInfoMapper">
+    
+    <resultMap type="ArmyMemInfo" id="ArmyMemInfoResult">
+        <result property="infoId"    column="info_id"    />
+        <result property="memId"    column="mem_id"    />
+        <result property="infoHeight"    column="info_height"    />
+        <result property="infoWeight"    column="info_weight"    />
+        <result property="infoSketch"    column="info_sketch"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectArmyMemInfoVo">
+        select info_id, mem_id, info_height, info_weight, info_sketch, update_time, create_time, status from army_mem_info
+    </sql>
+
+    <select id="selectArmyMemInfoList" parameterType="ArmyMemInfo" resultMap="ArmyMemInfoResult">
+        <include refid="selectArmyMemInfoVo"/>
+        <where>  
+            <if test="memId != null  and memId != ''"> and mem_id = #{memId}</if>
+            <if test="infoHeight != null "> and info_height &gt;= #{infoHeight}</if>
+            <if test="infoWeight != null "> and info_weight &gt;= #{infoWeight}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectArmyMemInfoById" parameterType="Long" resultMap="ArmyMemInfoResult">
+        <include refid="selectArmyMemInfoVo"/>
+        where info_id = #{infoId}
+    </select>
+        
+    <insert id="insertArmyMemInfo" parameterType="ArmyMemInfo" useGeneratedKeys="true" keyProperty="infoId">
+        insert into army_mem_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="memId != null">mem_id,</if>
+            <if test="infoHeight != null">info_height,</if>
+            <if test="infoWeight != null">info_weight,</if>
+            <if test="infoSketch != null">info_sketch,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="status != null">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="memId != null">#{memId},</if>
+            <if test="infoHeight != null">#{infoHeight},</if>
+            <if test="infoWeight != null">#{infoWeight},</if>
+            <if test="infoSketch != null">#{infoSketch},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="status != null">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateArmyMemInfo" parameterType="ArmyMemInfo">
+        update army_mem_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="memId != null">mem_id = #{memId},</if>
+            <if test="infoHeight != null">info_height = #{infoHeight},</if>
+            <if test="infoWeight != null">info_weight = #{infoWeight},</if>
+            <if test="infoSketch != null">info_sketch = #{infoSketch},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where info_id = #{infoId}
+    </update>
+
+    <delete id="deleteArmyMemInfoById" parameterType="Long">
+        delete from army_mem_info where info_id = #{infoId}
+    </delete>
+
+    <delete id="deleteArmyMemInfoByIds" parameterType="String">
+        delete from army_mem_info where info_id in 
+        <foreach item="infoId" collection="array" open="(" separator="," close=")">
+            #{infoId}
+        </foreach>
+    </delete>
+    
+</mapper>
