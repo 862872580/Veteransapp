@@ -35,8 +35,7 @@ public class ArmyMemInfoController extends BaseController {
     /**
      * 查询用户详细信息列表
      */
-    @PreAuthorize("@ss.hasPermi('army:info:list')")
-    @GetMapping("/list")
+    @PostMapping("/list")
     public TableDataInfo list(ArmyMemInfo armyMemInfo) {
         startPage();
         List<ArmyMemInfo> list = armyMemInfoService.selectArmyMemInfoList(armyMemInfo);
@@ -46,7 +45,6 @@ public class ArmyMemInfoController extends BaseController {
     /**
      * 导出用户详细信息列表
      */
-    @PreAuthorize("@ss.hasPermi('army:info:export')")
     @Log(title = "用户详细信息", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
     public AjaxResult export(ArmyMemInfo armyMemInfo) {
@@ -58,28 +56,33 @@ public class ArmyMemInfoController extends BaseController {
     /**
      * 获取用户详细信息详细信息
      */
-    @PreAuthorize("@ss.hasPermi('army:info:query')")
-    @GetMapping(value = "/{infoId}")
-    public AjaxResult getInfo(@PathVariable("infoId") Long infoId) {
+    @PostMapping(value = "/getinfo")
+    public AjaxResult getInfo(Long infoId) {
+        return AjaxResult.success(armyMemInfoService.selectArmyMemInfoById(infoId));
+    }
+
+    /**
+     * 获取用户详细信息详细信息
+     */
+    @PostMapping(value = "/app/getinfo")
+    public AjaxResult getInfoApp(Long infoId) {
         return AjaxResult.success(armyMemInfoService.selectArmyMemInfoById(infoId));
     }
 
     /**
      * 新增用户详细信息
      */
-    @PreAuthorize("@ss.hasPermi('army:info:add')")
     @Log(title = "用户详细信息", businessType = BusinessType.INSERT)
-    @PostMapping
-    public AjaxResult add(@RequestBody ArmyMemInfo armyMemInfo) {
+    @PostMapping("/insert")
+    public AjaxResult add(ArmyMemInfo armyMemInfo) {
         return toAjax(armyMemInfoService.insertArmyMemInfo(armyMemInfo));
     }
 
     /**
      * 修改用户详细信息
      */
-    @PreAuthorize("@ss.hasPermi('army:info:edit')")
     @Log(title = "用户详细信息", businessType = BusinessType.UPDATE)
-    @PutMapping
+    @PostMapping("/update")
     public AjaxResult edit(@RequestBody ArmyMemInfo armyMemInfo) {
         return toAjax(armyMemInfoService.updateArmyMemInfo(armyMemInfo));
     }
@@ -92,5 +95,14 @@ public class ArmyMemInfoController extends BaseController {
 	@DeleteMapping("/{infoIds}")
     public AjaxResult remove(@PathVariable Long[] infoIds) {
         return toAjax(armyMemInfoService.deleteArmyMemInfoByIds(infoIds));
+    }
+
+    /**
+     * 删除用户详细信息
+     */
+    @Log(title = "用户详细信息", businessType = BusinessType.DELETE)
+    @PostMapping("/delete")
+    public AjaxResult delete(Long infoId) {
+        return toAjax(armyMemInfoService.deleteArmyMemInfoById(infoId));
     }
 }

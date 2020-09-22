@@ -35,8 +35,7 @@ public class ArmyMemWorkaimController extends BaseController {
     /**
      * 查询求职意向列表
      */
-    @PreAuthorize("@ss.hasPermi('army:workaim:list')")
-    @GetMapping("/list")
+    @PostMapping("/list")
     public TableDataInfo list(ArmyMemWorkaim armyMemWorkaim) {
         startPage();
         List<ArmyMemWorkaim> list = armyMemWorkaimService.selectArmyMemWorkaimList(armyMemWorkaim);
@@ -46,7 +45,6 @@ public class ArmyMemWorkaimController extends BaseController {
     /**
      * 导出求职意向列表
      */
-    @PreAuthorize("@ss.hasPermi('army:workaim:export')")
     @Log(title = "求职意向", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
     public AjaxResult export(ArmyMemWorkaim armyMemWorkaim) {
@@ -58,39 +56,46 @@ public class ArmyMemWorkaimController extends BaseController {
     /**
      * 获取求职意向详细信息
      */
-    @PreAuthorize("@ss.hasPermi('army:workaim:query')")
-    @GetMapping(value = "/{workaimId}")
-    public AjaxResult getInfo(@PathVariable("workaimId") Long workaimId) {
+    @PostMapping(value = "/getinfo")
+    public AjaxResult getInfo(Long workaimId) {
         return AjaxResult.success(armyMemWorkaimService.selectArmyMemWorkaimById(workaimId));
     }
 
     /**
      * 新增求职意向
      */
-    @PreAuthorize("@ss.hasPermi('army:workaim:add')")
     @Log(title = "求职意向", businessType = BusinessType.INSERT)
-    @PostMapping
-    public AjaxResult add(@RequestBody ArmyMemWorkaim armyMemWorkaim) {
+    @PostMapping("insert")
+    public AjaxResult add(ArmyMemWorkaim armyMemWorkaim) {
         return toAjax(armyMemWorkaimService.insertArmyMemWorkaim(armyMemWorkaim));
     }
 
     /**
      * 修改求职意向
      */
-    @PreAuthorize("@ss.hasPermi('army:workaim:edit')")
     @Log(title = "求职意向", businessType = BusinessType.UPDATE)
-    @PutMapping
-    public AjaxResult edit(@RequestBody ArmyMemWorkaim armyMemWorkaim) {
+    @PostMapping("/update")
+    public AjaxResult edit(ArmyMemWorkaim armyMemWorkaim) {
         return toAjax(armyMemWorkaimService.updateArmyMemWorkaim(armyMemWorkaim));
     }
+
 
     /**
      * 删除求职意向
      */
-    @PreAuthorize("@ss.hasPermi('army:workaim:remove')")
     @Log(title = "求职意向", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{workaimIds}")
     public AjaxResult remove(@PathVariable Long[] workaimIds) {
         return toAjax(armyMemWorkaimService.deleteArmyMemWorkaimByIds(workaimIds));
     }
+
+    /**
+     * 修改求职意向
+     */
+    @Log(title = "求职意向", businessType = BusinessType.UPDATE)
+    @PostMapping("/delete")
+    public AjaxResult update(Long workaimId) {
+        return toAjax(armyMemWorkaimService.deleteArmyMemWorkaimById(workaimId));
+    }
+
 }

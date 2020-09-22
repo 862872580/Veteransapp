@@ -57,4 +57,8 @@ public interface IArmyMemService {
      * @return 结果
      */
     public int deleteArmyMemById(String memId);
+
+    String login(String phone, String code);
+
+    String sendSMS(String phone);
 }

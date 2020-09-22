@@ -44,6 +44,16 @@ public class ArmyComWorkController extends BaseController {
     }
 
     /**
+     * 查询工作列表
+     */
+    @PostMapping("/getlist")
+    public TableDataInfo getList(ArmyComWork armyComWork) {
+        startPage();
+        List<ArmyComWork> list = armyComWorkService.selectArmyComWorkList(armyComWork);
+        return getDataTable(list);
+    }
+
+    /**
      * 导出工作列表
      */
     @PreAuthorize("@ss.hasPermi('army:work:export')")
@@ -65,12 +75,21 @@ public class ArmyComWorkController extends BaseController {
     }
 
     /**
+     * 获取工作详细信息
+     */
+    @GetMapping(value = "/getinfo")
+    public AjaxResult getInfoApp(Long workId) {
+        return AjaxResult.success(armyComWorkService.selectArmyComWorkById(workId));
+    }
+
+    /**
      * 新增工作
      */
     @PreAuthorize("@ss.hasPermi('army:work:add')")
     @Log(title = "工作", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody ArmyComWork armyComWork) {
+        armyComWork.setStatus("0");
         return toAjax(armyComWorkService.insertArmyComWork(armyComWork));
     }
 

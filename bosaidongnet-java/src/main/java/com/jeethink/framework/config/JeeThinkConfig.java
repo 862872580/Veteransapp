@@ -113,4 +113,18 @@ public class JeeThinkConfig
     {
         return getProfile() + "/upload";
     }
+
+    /**
+     * 获取用户头像上传路径
+     */
+    public static String getHandImagePhotoPath() {
+        return getProfile() + "/handimage";
+    }
+
+    /**
+     * 获取用户头像上传路径
+     */
+    public static String getComPhotoPath() {
+        return getProfile() + "/com";
+    }
 }

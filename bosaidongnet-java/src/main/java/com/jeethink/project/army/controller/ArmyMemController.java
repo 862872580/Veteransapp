@@ -1,16 +1,15 @@
 package com.jeethink.project.army.controller;
 
+import java.io.IOException;
 import java.util.List;
+
+import com.jeethink.common.utils.file.FileUploadUtils;
+import com.jeethink.framework.config.JeeThinkConfig;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.jeethink.framework.aspectj.lang.annotation.Log;
 import com.jeethink.framework.aspectj.lang.enums.BusinessType;
 import com.jeethink.project.army.domain.ArmyMem;
@@ -19,6 +18,7 @@ import com.jeethink.framework.web.controller.BaseController;
 import com.jeethink.framework.web.domain.AjaxResult;
 import com.jeethink.common.utils.poi.ExcelUtil;
 import com.jeethink.framework.web.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 用户Controller
@@ -26,6 +26,7 @@ import com.jeethink.framework.web.page.TableDataInfo;
  * @author miao
  * @date 2020-09-18
  */
+@Api(value = "用户模块")
 @RestController
 @RequestMapping("/army/mem")
 public class ArmyMemController extends BaseController {
@@ -65,6 +66,14 @@ public class ArmyMemController extends BaseController {
     }
 
     /**
+     * 获取用户详细信息
+     */
+    @PostMapping(value = "/getinfo")
+    public AjaxResult getInfoApp(String memId) {
+        return AjaxResult.success(armyMemService.selectArmyMemById(memId));
+    }
+
+    /**
      * 新增用户
      */
     @PreAuthorize("@ss.hasPermi('army:mem:add')")
@@ -77,9 +86,8 @@ public class ArmyMemController extends BaseController {
     /**
      * 修改用户
      */
-    @PreAuthorize("@ss.hasPermi('army:mem:edit')")
     @Log(title = "用户", businessType = BusinessType.UPDATE)
-    @PutMapping
+    @PostMapping("/update")
     public AjaxResult edit(@RequestBody ArmyMem armyMem) {
         return toAjax(armyMemService.updateArmyMem(armyMem));
     }
@@ -92,5 +100,44 @@ public class ArmyMemController extends BaseController {
 	@DeleteMapping("/{memIds}")
     public AjaxResult remove(@PathVariable String[] memIds) {
         return toAjax(armyMemService.deleteArmyMemByIds(memIds));
+    }
+
+    /**
+     * 短信验证登陆
+     * @param phone 手机号
+     * @param code 验证码
+     * @return 是否成功
+     */
+    @PostMapping("/login")
+    public String login(String phone, String code){
+        return armyMemService.login(phone, code);
+    }
+
+    /**
+     * 发送验证码
+     * @param phone 手机号
+     * @return 是否成功
+     */
+    @PostMapping("/sendsms")
+    @ApiOperation("发送短息")
+    public String sendSMS(String phone){
+        return armyMemService.sendSMS(phone);
+    }
+
+    /**
+     * 用户头像上传
+     */
+    @Log(title = "用户头像", businessType = BusinessType.UPDATE)
+    @PostMapping("/photo")
+    public AjaxResult photo(@RequestParam("photofile") MultipartFile file) throws IOException
+    {
+        if (!file.isEmpty())
+        {
+            String photo = FileUploadUtils.upload(JeeThinkConfig.getHandImagePhotoPath(), file);
+            AjaxResult ajax = AjaxResult.success();
+            ajax.put("imgUrl", photo);
+            return ajax;
+        }
+        return AjaxResult.error("上传图片异常，请联系管理员");
     }
 }

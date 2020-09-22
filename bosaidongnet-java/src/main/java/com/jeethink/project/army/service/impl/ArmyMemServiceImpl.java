@@ -1,7 +1,12 @@
 package com.jeethink.project.army.service.impl;
 
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
+
 import com.jeethink.common.utils.DateUtils;
+import com.jeethink.framework.SMS.TengXunSMS;
+import com.jeethink.project.army.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.jeethink.project.army.mapper.ArmyMemMapper;
@@ -19,6 +24,9 @@ public class ArmyMemServiceImpl implements IArmyMemService {
     @Autowired
     private ArmyMemMapper armyMemMapper;
 
+    @Autowired
+    private RedisUtil redisUtil;
+
     /**
      * 查询用户
      * 
@@ -27,7 +35,8 @@ public class ArmyMemServiceImpl implements IArmyMemService {
      */
     @Override
     public ArmyMem selectArmyMemById(String memId) {
-        return armyMemMapper.selectArmyMemById(memId);
+        ArmyMem armyMem = armyMemMapper.selectArmyMemById(memId);
+        return armyMem;
     }
 
     /**
@@ -50,6 +59,8 @@ public class ArmyMemServiceImpl implements IArmyMemService {
     @Override
     public int insertArmyMem(ArmyMem armyMem) {
         armyMem.setCreateTime(DateUtils.getNowDate());
+        armyMem.setMemId(UUID.randomUUID().toString());
+        armyMem.setStatus("1");
         return armyMemMapper.insertArmyMem(armyMem);
     }
 
@@ -85,5 +96,31 @@ public class ArmyMemServiceImpl implements IArmyMemService {
     @Override
     public int deleteArmyMemById(String memId) {
         return armyMemMapper.deleteArmyMemById(memId);
+    }
+
+    @Override
+    public String login(String phone, String code) {
+        if (code.equals(redisUtil.getString(phone))) {
+            return "1";
+        }else{
+            return "0";
+        }
+    }
+
+    @Override
+    public String sendSMS(String phone) {
+        if (armyMemMapper.selectMemByPhone(phone) == null){
+            return "0";
+        }
+        //生成随机验证码
+        String code = String.valueOf(new Random().nextInt(899999) + 100000);
+
+        //redis存储验证码并设置超时时间
+        long overtime = 60;
+        redisUtil.setString(phone,code,overtime);
+
+        //发送验证码
+        TengXunSMS.validation(phone, code, 334697);
+        return "1";
     }
 }

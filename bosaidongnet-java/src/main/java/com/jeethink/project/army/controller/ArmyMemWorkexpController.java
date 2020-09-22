@@ -35,8 +35,7 @@ public class ArmyMemWorkexpController extends BaseController {
     /**
      * 查询工作经历列表
      */
-    @PreAuthorize("@ss.hasPermi('army:workexp:list')")
-    @GetMapping("/list")
+    @PostMapping("/list")
     public TableDataInfo list(ArmyMemWorkexp armyMemWorkexp) {
         startPage();
         List<ArmyMemWorkexp> list = armyMemWorkexpService.selectArmyMemWorkexpList(armyMemWorkexp);
@@ -46,7 +45,6 @@ public class ArmyMemWorkexpController extends BaseController {
     /**
      * 导出工作经历列表
      */
-    @PreAuthorize("@ss.hasPermi('army:workexp:export')")
     @Log(title = "工作经历", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
     public AjaxResult export(ArmyMemWorkexp armyMemWorkexp) {
@@ -58,39 +56,44 @@ public class ArmyMemWorkexpController extends BaseController {
     /**
      * 获取工作经历详细信息
      */
-    @PreAuthorize("@ss.hasPermi('army:workexp:query')")
-    @GetMapping(value = "/{workexpId}")
-    public AjaxResult getInfo(@PathVariable("workexpId") Long workexpId) {
+    @PostMapping(value = "/getinfo")
+    public AjaxResult getInfo(Long workexpId) {
         return AjaxResult.success(armyMemWorkexpService.selectArmyMemWorkexpById(workexpId));
     }
 
     /**
      * 新增工作经历
      */
-    @PreAuthorize("@ss.hasPermi('army:workexp:add')")
     @Log(title = "工作经历", businessType = BusinessType.INSERT)
-    @PostMapping
-    public AjaxResult add(@RequestBody ArmyMemWorkexp armyMemWorkexp) {
+    @PostMapping("/insert")
+    public AjaxResult add(ArmyMemWorkexp armyMemWorkexp) {
         return toAjax(armyMemWorkexpService.insertArmyMemWorkexp(armyMemWorkexp));
     }
 
     /**
      * 修改工作经历
      */
-    @PreAuthorize("@ss.hasPermi('army:workexp:edit')")
     @Log(title = "工作经历", businessType = BusinessType.UPDATE)
-    @PutMapping
-    public AjaxResult edit(@RequestBody ArmyMemWorkexp armyMemWorkexp) {
+    @PostMapping("/update")
+    public AjaxResult edit(ArmyMemWorkexp armyMemWorkexp) {
         return toAjax(armyMemWorkexpService.updateArmyMemWorkexp(armyMemWorkexp));
     }
 
     /**
      * 删除工作经历
      */
-    @PreAuthorize("@ss.hasPermi('army:workexp:remove')")
     @Log(title = "工作经历", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{workexpIds}")
     public AjaxResult remove(@PathVariable Long[] workexpIds) {
         return toAjax(armyMemWorkexpService.deleteArmyMemWorkexpByIds(workexpIds));
+    }
+
+    /**
+     * 删除工作经历
+     */
+    @Log(title = "工作经历", businessType = BusinessType.DELETE)
+    @PostMapping("/delete")
+    public AjaxResult delete(Long workexpId) {
+        return toAjax(armyMemWorkexpService.deleteArmyMemWorkexpById(workexpId));
     }
 }

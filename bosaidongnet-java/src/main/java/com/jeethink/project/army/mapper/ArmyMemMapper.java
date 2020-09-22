@@ -57,4 +57,6 @@ public interface ArmyMemMapper {
      * @return 结果
      */
     public int deleteArmyMemByIds(String[] memIds);
+
+    ArmyMem selectMemByPhone(String phone);
 }

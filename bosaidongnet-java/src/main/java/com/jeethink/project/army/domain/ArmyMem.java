@@ -1,6 +1,8 @@
 package com.jeethink.project.army.domain;
 
 import java.util.Date;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -59,6 +61,14 @@ public class ArmyMem extends BaseEntity{
     /** 修改之前的id */
     @Excel(name = "修改之前的id")
     private Long previous;
+
+    private ArmyMemInfo armyMemInfo;
+
+    private List<ArmyMemEduexp> armyMemEduexps;
+
+    private List<ArmyMemWorkexp> armyMemWorkexps;
+
+    private List<ArmyMemWorkaim> armyMemWorkaims;
 
     public void setMemId(String memId){
         this.memId = memId;
@@ -136,6 +146,38 @@ public class ArmyMem extends BaseEntity{
 
     public Long getPrevious(){
         return previous;
+    }
+
+    public ArmyMemInfo getArmyMemInfo() {
+        return armyMemInfo;
+    }
+
+    public void setArmyMemInfo(ArmyMemInfo armyMemInfo) {
+        this.armyMemInfo = armyMemInfo;
+    }
+
+    public List<ArmyMemEduexp> getArmyMemEduexps() {
+        return armyMemEduexps;
+    }
+
+    public void setArmyMemEduexps(List<ArmyMemEduexp> armyMemEduexps) {
+        this.armyMemEduexps = armyMemEduexps;
+    }
+
+    public List<ArmyMemWorkexp> getArmyMemWorkexps() {
+        return armyMemWorkexps;
+    }
+
+    public void setArmyMemWorkexps(List<ArmyMemWorkexp> armyMemWorkexps) {
+        this.armyMemWorkexps = armyMemWorkexps;
+    }
+
+    public List<ArmyMemWorkaim> getArmyMemWorkaims() {
+        return armyMemWorkaims;
+    }
+
+    public void setArmyMemWorkaims(List<ArmyMemWorkaim> armyMemWorkaims) {
+        this.armyMemWorkaims = armyMemWorkaims;
     }
 
     @Override

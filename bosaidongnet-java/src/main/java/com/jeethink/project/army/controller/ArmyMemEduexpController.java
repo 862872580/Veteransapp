@@ -35,8 +35,7 @@ public class ArmyMemEduexpController extends BaseController {
     /**
      * 查询教育经历列表
      */
-    @PreAuthorize("@ss.hasPermi('army:eduexp:list')")
-    @GetMapping("/list")
+    @PostMapping("/list")
     public TableDataInfo list(ArmyMemEduexp armyMemEduexp) {
         startPage();
         List<ArmyMemEduexp> list = armyMemEduexpService.selectArmyMemEduexpList(armyMemEduexp);
@@ -46,7 +45,6 @@ public class ArmyMemEduexpController extends BaseController {
     /**
      * 导出教育经历列表
      */
-    @PreAuthorize("@ss.hasPermi('army:eduexp:export')")
     @Log(title = "教育经历", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
     public AjaxResult export(ArmyMemEduexp armyMemEduexp) {
@@ -58,39 +56,44 @@ public class ArmyMemEduexpController extends BaseController {
     /**
      * 获取教育经历详细信息
      */
-    @PreAuthorize("@ss.hasPermi('army:eduexp:query')")
-    @GetMapping(value = "/{eduexpId}")
-    public AjaxResult getInfo(@PathVariable("eduexpId") Long eduexpId) {
+    @PostMapping(value = "/getInfo")
+    public AjaxResult getInfo(Long eduexpId) {
         return AjaxResult.success(armyMemEduexpService.selectArmyMemEduexpById(eduexpId));
     }
 
     /**
      * 新增教育经历
      */
-    @PreAuthorize("@ss.hasPermi('army:eduexp:add')")
     @Log(title = "教育经历", businessType = BusinessType.INSERT)
-    @PostMapping
-    public AjaxResult add(@RequestBody ArmyMemEduexp armyMemEduexp) {
+    @PostMapping("/insert")
+    public AjaxResult add(ArmyMemEduexp armyMemEduexp) {
         return toAjax(armyMemEduexpService.insertArmyMemEduexp(armyMemEduexp));
     }
 
     /**
      * 修改教育经历
      */
-    @PreAuthorize("@ss.hasPermi('army:eduexp:edit')")
     @Log(title = "教育经历", businessType = BusinessType.UPDATE)
-    @PutMapping
-    public AjaxResult edit(@RequestBody ArmyMemEduexp armyMemEduexp) {
+    @PostMapping("/update")
+    public AjaxResult edit(ArmyMemEduexp armyMemEduexp) {
         return toAjax(armyMemEduexpService.updateArmyMemEduexp(armyMemEduexp));
     }
 
     /**
      * 删除教育经历
      */
-    @PreAuthorize("@ss.hasPermi('army:eduexp:remove')")
     @Log(title = "教育经历", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{eduexpIds}")
+	@PostMapping("/{eduexpIds}")
     public AjaxResult remove(@PathVariable Long[] eduexpIds) {
         return toAjax(armyMemEduexpService.deleteArmyMemEduexpByIds(eduexpIds));
+    }
+
+    /**
+     * 删除教育经历
+     */
+    @Log(title = "教育经历", businessType = BusinessType.DELETE)
+    @PostMapping("/delete")
+    public AjaxResult delete(Long eduexpId) {
+        return toAjax(armyMemEduexpService.deleteArmyMemEduexpById(eduexpId));
     }
 }

@@ -98,6 +98,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                         "/**/*.css",
                         "/**/*.js"
                 ).permitAll()
+                //小程序接口
+                .antMatchers("/army/mem/update").anonymous()
+                .antMatchers("/army/mem/login").anonymous()
+                .antMatchers("/dev-api/army/mem/sendsms").anonymous()
+                .antMatchers("/army/mem/getinfo").anonymous()
+                .antMatchers("/army/mem/photo").anonymous()
+                .antMatchers("/army/eduexp/**").anonymous()
+                .antMatchers("/army/info/**").anonymous()
+                .antMatchers("/army/workaim/**").anonymous()
+                .antMatchers("/army/workexp/**").anonymous()
+                .antMatchers("/army/work/getlist").anonymous()
+                .antMatchers("/army/work/getinfo").anonymous()
+                .antMatchers("/army/com/getinfo").anonymous()
+                .antMatchers("/army/com/photo").anonymous()
+
+
                 .antMatchers("/profile/**").anonymous()
                 .antMatchers("/common/download**").anonymous()
                 .antMatchers("/common/download/resource**").anonymous()
